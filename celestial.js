@@ -149,122 +149,150 @@ Celestial.display = function(config, callback = null) {
     }
 
     //Milky way outline
-    d3.json(path + "mw.json", function(error, json) {
-      if (error) { 
+    let handleMilkyWayOutline = function(error, json) {
+      if (error) {
         window.alert("Data file could not be loaded or doesn't exist. See readme.md");
-        return console.warn(error);  
+        return console.warn(error);
       }
 
       var mw = getData(json, cfg.transform);
       var mw_back = getMwbackground(mw);
 
       container.selectAll(parentElement + " .mway")
-         .data(mw.features)
-         .enter().append("path")
-         .attr("class", "mw");
+          .data(mw.features)
+          .enter().append("path")
+          .attr("class", "mw");
       container.selectAll(parentElement + " .mwaybg")
-         .data(mw_back.features)
-         .enter().append("path")
-         .attr("class", "mwbg");
+          .data(mw_back.features)
+          .enter().append("path")
+          .attr("class", "mwbg");
       redraw();
-    }); 
+    };
 
     //Constellation names or designation
-    d3.json(path + filename("constellations"), function(error, json) {
+    let handleConstellations = function(error, json) {
       if (error) return console.warn(error);
-      
+
       var con = getData(json, cfg.transform);
       container.selectAll(parentElement + " .constnames")
-         .data(con.features)
-         .enter().append("text")
-         .attr("class", "constname");
-         
+          .data(con.features)
+          .enter().append("text")
+          .attr("class", "constname");
+
       Celestial.constellations = getConstellationList(con);
       redraw();
-    });
+    };
 
     //Constellation boundaries
-    d3.json(path + filename("constellations", "borders"), function(error, json) {
+    let handleConstellationBoundaries = function(error, json) {
       if (error) return console.warn(error);
-      
+
       //var cb = getData(topojson.feature(json, json.objects.constellations_bounds), cfg.transform);
       var cb = getData(json, cfg.transform);
-      
+
       container.selectAll(parentElement + " .bounds")
-         .data(cb.features)
-         .enter().append("path")
-         .attr("class", "boundaryline");
+          .data(cb.features)
+          .enter().append("path")
+          .attr("class", "boundaryline");
       redraw();
-    });
+    };
 
     //Constellation lines
-    d3.json(path + filename("constellations", "lines"), function(error, json) {
+    let handleConstellationLines = function(error, json) {
       if (error) return console.warn(error);
 
       var conl = getData(json, cfg.transform);
 
       container.selectAll(parentElement + " .lines")
-         .data(conl.features)
-         .enter().append("path")
-         .attr("class", "constline");
+          .data(conl.features)
+          .enter().append("path")
+          .attr("class", "constline");
 
       listConstellations();
       redraw();
-    });
-    
+    };
+
     //Stars
-    d3.json(path + cfg.stars.data, function(error, json) {
+    let handleStars = function(error, json) {
       if (error) return console.warn(error);
 
       var st = getData(json, cfg.transform);
 
       container.selectAll(parentElement + " .stars")
-         .data(st.features)
-         .enter().append("path")
-         .attr("class", "star");
+          .data(st.features)
+          .enter().append("path")
+          .attr("class", "star");
       redraw();
 
-    });
+    };
+
+
 
     //Star names
-    d3.json(path + filename("starnames"), function(error, json) {
+    let handleStarNames = function(error, json) {
       if (error) return console.warn(error);
       Object.assign(starnames, json);
       redraw();
-    });
+    };
 
     //Deep space objects
-    d3.json(path + cfg.dsos.data, function(error, json) {
+    let handleDsos = function(error, json) {
       if (error) return console.warn(error);
-      
+
       var ds = getData(json, cfg.transform);
 
       container.selectAll(parentElement + " .dsos")
-         .data(ds.features)
-         .enter().append("path")
-         .attr("class", "dso" );
+          .data(ds.features)
+          .enter().append("path")
+          .attr("class", "dso" );
       redraw();
-    });
+    };
 
     //DSO names
-    d3.json(path + filename("dsonames"), function(error, json) {
+
+    let handleDsoNames = function(error, json) {
       if (error) return console.warn(error);
       Object.assign(dsonames, json);
       redraw();
-    });
+    };
 
     //Planets, Sun & Moon
-    d3.json(path + filename("planets"), function(error, json) {
+    let handleSolarObjects = function(error, json) {
       if (error) return console.warn(error);
-      
+
       var pl = getPlanets(json, cfg.transform);
 
       container.selectAll(parentElement + " .planets")
-         .data(pl)
-         .enter().append("path")
-         .attr("class", "planet");
+          .data(pl)
+          .enter().append("path")
+          .attr("class", "planet");
       redraw();
-    });
+    };
+
+    d3.queue()
+        .defer(path + "mw.json")
+        .defer(path + filename("constellations"))
+        .defer(path + filename("constellations", "borders"))
+        .defer(path + filename("constellations", "lines"))
+        .defer(path + cfg.stars.data)
+        .defer(path + filename("starnames"))
+        .defer(path + cfg.dsos.data)
+        .defer(path + filename("dsonames"))
+        .defer(path + filename("planets"))
+        .await(function(err, ...charts) {
+          handleMilkyWayOutline(err, charts[0]);
+          handleConstellations(err, charts[1]);
+          handleConstellationBoundaries(err, charts[2]);
+          handleConstellationLines(err, charts[3]);
+          handleStars(err, charts[4]);
+          handleStarNames(err, charts[5]);
+          handleDsos(err, charts[6]);
+          handleDsoNames(err, charts[7]);
+          handleSolarObjects(err, charts[8]);
+          if (!!callback) {
+            callback();
+          }
+        });
 
     if (Celestial.data.length > 0) { 
       Celestial.data.forEach( function(d) {
@@ -275,10 +303,6 @@ Celestial.display = function(config, callback = null) {
   
     if (cfg.lang && cfg.lang != "") apply(Celestial.setLanguage(cfg.lang));
     //redraw();
-
-    if (!!callback) {
-      callback();
-    }
   }
   
   // Zoom by factor; >1 larger <1 smaller 
