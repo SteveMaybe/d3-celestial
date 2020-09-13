@@ -5410,6 +5410,11 @@ Celestial.exportSVG = function(callback) {
   exportCallback = callback;
   exportSVG();
 };
+
+Celestial.exportSVG = function() {
+  return exportPNG();
+};
+
 var datetimepicker = function(cfg, callback) {
   var date = new Date(), 
       tzFormat = d3.time.format("%Z"),
