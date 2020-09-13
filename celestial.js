@@ -270,15 +270,15 @@ Celestial.display = function(config, callback = null) {
     };
 
     d3.queue()
-        .defer(path + "mw.json")
-        .defer(path + filename("constellations"))
-        .defer(path + filename("constellations", "borders"))
-        .defer(path + filename("constellations", "lines"))
-        .defer(path + cfg.stars.data)
-        .defer(path + filename("starnames"))
-        .defer(path + cfg.dsos.data)
-        .defer(path + filename("dsonames"))
-        .defer(path + filename("planets"))
+        .defer(d3.json, path + "mw.json")
+        .defer(d3.json, path + filename("constellations"))
+        .defer(d3.json, path + filename("constellations", "borders"))
+        .defer(d3.json, path + filename("constellations", "lines"))
+        .defer(d3.json, path + cfg.stars.data)
+        .defer(d3.json, path + filename("starnames"))
+        .defer(d3.json, path + cfg.dsos.data)
+        .defer(d3.json, path + filename("dsonames"))
+        .defer(d3.json, path + filename("planets"))
         .await(function(err, ...charts) {
           handleMilkyWayOutline(err, charts[0]);
           handleConstellations(err, charts[1]);
