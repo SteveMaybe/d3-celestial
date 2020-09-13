@@ -17,7 +17,7 @@ var ANIMDISTANCE = 0.035,  // Rotation animation threshold, ~2deg in radians
 var cfg, mapProjection, parentElement, zoom, map, circle, daylight, starnames = {}, dsonames = {};
 
 // Show it all, with the given config, otherwise with default settings
-Celestial.display = function(config) {
+Celestial.display = function(config, callback = null) {
   var animationID,
       container = Celestial.container,
       animations = [], 
@@ -118,7 +118,7 @@ Celestial.display = function(config) {
     fldEnable("daylight-show", !projectionSetting.clip);
   }
 
-  function load() {
+  function load(callback = null) {
     //Background
     setClip(projectionSetting.clip);
     container.append("path").datum(graticule.outline).attr("class", "outline"); 
@@ -275,6 +275,10 @@ Celestial.display = function(config) {
   
     if (cfg.lang && cfg.lang != "") apply(Celestial.setLanguage(cfg.lang));
     //redraw();
+
+    if (!!callback) {
+      callback();
+    }
   }
   
   // Zoom by factor; >1 larger <1 smaller 
@@ -944,7 +948,7 @@ Celestial.display = function(config) {
     resize(true); 
     return cfg.width;
   }; 
-  this.reload = function(config) { 
+  this.reload = function(config, callback = null) {
     var ctr;
     //if (!config || !has(config, "transform")) return;
     //cfg.transform = config.transform; 
@@ -956,7 +960,7 @@ Celestial.display = function(config) {
     } 
     if (ctr) mapProjection.rotate(ctr);
     container.selectAll(parentElement + " *").remove(); 
-    load(); 
+    load(callback);
   }; 
   this.apply = function(config) { apply(config); }; 
   this.reproject = function(config) { return reproject(config); }; 
@@ -989,7 +993,7 @@ Celestial.display = function(config) {
   if (!has(this, "date"))
     this.date = function() { console.log("Celestial.date() needs config.location = true to work." ); };
   */
-  load();
+  load(callback);
 };
  
 //Export entire object if invoked by require
