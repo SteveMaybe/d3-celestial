@@ -5411,7 +5411,7 @@ Celestial.exportSVG = function(callback) {
   exportSVG();
 };
 
-Celestial.exportSVG = function() {
+Celestial.exportPNG = function() {
   return exportPNG();
 };
 
