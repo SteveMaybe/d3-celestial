@@ -4576,6 +4576,12 @@ var Moon = {
   }
 
 };
+
+function exportPNG() {
+  let canvas = document.querySelector(parentElement + ' canvas');
+  return canvas.toDataURL("img/png");
+}
+
 function exportSVG(fname) {
   var doc = d3.select("body").append("div").attr("id", "d3-celestial-svg").attr("style", "display: none"),
       svg = d3.select("#d3-celestial-svg").append("svg"), //.attr("style", "display: none"),
