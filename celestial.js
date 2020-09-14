@@ -223,7 +223,6 @@ Celestial.display = function(config, callback = null) {
           .enter().append("path")
           .attr("class", "star");
       redraw();
-
     };
 
 
@@ -291,7 +290,7 @@ Celestial.display = function(config, callback = null) {
               .defer(handleDsos, err, charts[6])
               .defer(handleDsoNames, err, charts[7])
               .defer(handleSolarObjects, err, charts[8])
-              .await(() => {
+              .await(function(err, ...v) {
                 console.log("Done applying transforms");
                 if (!!callback) {
                   callback();
