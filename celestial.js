@@ -759,6 +759,7 @@ Celestial.display = function(config, callback = null) {
     if (has(s, "dash")) context.setLineDash(s.dash); else context.setLineDash([]);
     context.textAlign = s.align || "left";
     context.textBaseline = s.baseline || "bottom";
+    context.lineCap = "round";
     context.beginPath();
   }
 
