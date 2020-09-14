@@ -759,6 +759,7 @@ Celestial.display = function(config, callback = null) {
     context.textAlign = s.align || "left";
     context.textBaseline = s.baseline || "bottom";
     context.lineCap = "round";
+    context.lineJoin  = "round";
     context.beginPath();
   }
 
