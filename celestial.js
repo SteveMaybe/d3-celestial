@@ -166,7 +166,6 @@ Celestial.display = function(config, callback = null) {
           .data(mw_back.features)
           .enter().append("path")
           .attr("class", "mwbg");
-      redraw();
       c(null);
     };
 
@@ -181,7 +180,6 @@ Celestial.display = function(config, callback = null) {
           .attr("class", "constname");
 
       Celestial.constellations = getConstellationList(con);
-      redraw();
       c(null);
     };
 
@@ -196,7 +194,6 @@ Celestial.display = function(config, callback = null) {
           .data(cb.features)
           .enter().append("path")
           .attr("class", "boundaryline");
-      redraw();
       c(null);
     };
 
@@ -212,7 +209,6 @@ Celestial.display = function(config, callback = null) {
           .attr("class", "constline");
 
       listConstellations();
-      redraw();
       c(null);
     };
 
@@ -226,7 +222,6 @@ Celestial.display = function(config, callback = null) {
           .data(st.features)
           .enter().append("path")
           .attr("class", "star");
-      redraw();
       c(null);
     };
 
@@ -236,7 +231,6 @@ Celestial.display = function(config, callback = null) {
     let handleStarNames = function(error, json, c) {
       if (error) return console.warn(error);
       Object.assign(starnames, json);
-      redraw();
       c(null);
     };
 
@@ -250,7 +244,6 @@ Celestial.display = function(config, callback = null) {
           .data(ds.features)
           .enter().append("path")
           .attr("class", "dso" );
-      redraw();
       c(null);
     };
 
@@ -259,7 +252,6 @@ Celestial.display = function(config, callback = null) {
     let handleDsoNames = function(error, json, c) {
       if (error) return console.warn(error);
       Object.assign(dsonames, json);
-      redraw();
       c(null);
     };
 
@@ -273,7 +265,6 @@ Celestial.display = function(config, callback = null) {
           .data(pl)
           .enter().append("path")
           .attr("class", "planet");
-      redraw();
       c(null);
     };
     console.log("Starting loading json");
@@ -301,6 +292,7 @@ Celestial.display = function(config, callback = null) {
               .defer(handleSolarObjects, err, charts[8])
               .await(function(err, ...v) {
                 console.log("Done applying transforms");
+                redraw();
                 if (!!callback) {
                   callback();
                 }
