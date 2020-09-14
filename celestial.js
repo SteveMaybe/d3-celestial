@@ -268,7 +268,7 @@ Celestial.display = function(config, callback = null) {
           .attr("class", "planet");
       redraw();
     };
-
+    console.log("Starting loading json");
     d3.queue()
         .defer(d3.json, path + "mw.json")
         .defer(d3.json, path + filename("constellations"))
@@ -280,15 +280,7 @@ Celestial.display = function(config, callback = null) {
         .defer(d3.json, path + filename("dsonames"))
         .defer(d3.json, path + filename("planets"))
         .await(function(err, ...charts) {
-          handleMilkyWayOutline(err, charts[0]);
-          handleConstellations(err, charts[1]);
-          handleConstellationBoundaries(err, charts[2]);
-          handleConstellationLines(err, charts[3]);
-          handleStars(err, charts[4]);
-          handleStarNames(err, charts[5]);
-          handleDsos(err, charts[6]);
-          handleDsoNames(err, charts[7]);
-          handleSolarObjects(err, charts[8]);
+          console.log("Done loading json");
           d3.queue()
               .defer(handleMilkyWayOutline, err, charts[0])
               .defer(handleConstellations, err, charts[1])
@@ -300,11 +292,13 @@ Celestial.display = function(config, callback = null) {
               .defer(handleDsoNames, err, charts[7])
               .defer(handleSolarObjects, err, charts[8])
               .await(() => {
+                console.log("Done applying transforms");
                 if (!!callback) {
                   callback();
                 }
               });
         });
+    console.log("Done async block");
 
     if (Celestial.data.length > 0) { 
       Celestial.data.forEach( function(d) {
