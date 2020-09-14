@@ -4756,16 +4756,19 @@ function exportSVG(fname) {
         styles.constLines1 = {"fill": "none", "stroke": cfg.constellations.lineStyle.stroke[0],
                               "stroke-width": cfg.constellations.lineStyle.width[0],
                               "stroke-opacity": cfg.constellations.lineStyle.opacity[0],
+                              "stroke-linecap": "round",
                               "stroke-linejoin": "round",
                               "stroke-dasharray": dasharray};
         styles.constLines2 = {"fill": "none", "stroke": cfg.constellations.lineStyle.stroke[1],
                               "stroke-width": cfg.constellations.lineStyle.width[1],
                               "stroke-opacity": cfg.constellations.lineStyle.opacity[1],
+                              "stroke-linecap": "round",
                               "stroke-linejoin": "round",
                               "stroke-dasharray": dasharray};
         styles.constLines3 = {"fill": "none", "stroke": cfg.constellations.lineStyle.stroke[2],
                               "stroke-width": cfg.constellations.lineStyle.width[2],
                               "stroke-opacity": cfg.constellations.lineStyle.opacity[2],
+                              "stroke-linecap": "round",
                               "stroke-linejoin": "round",
                               "stroke-dasharray": dasharray};
         callback(null);
