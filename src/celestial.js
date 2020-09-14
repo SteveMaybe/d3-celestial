@@ -1023,6 +1023,16 @@ Celestial.display = function(config, callback = null) {
   */
   load(callback);
 };
+
+
+function exportPNG() {
+  let canvas = document.querySelector(parentElement + ' canvas');
+  return canvas.toDataURL("img/png");
+}
+
+Celestial.exportPNG = function() {
+  return exportPNG();
+};
  
 //Export entire object if invoked by require
 if (typeof module === "object" && module.exports) {

@@ -827,12 +827,3 @@ Celestial.exportSVG = function(callback) {
   exportCallback = callback;
   exportSVG();
 };
-
-function exportPNG() {
-  let canvas = document.querySelector(parentElement + ' canvas');
-  return canvas.toDataURL("img/png");
-}
-
-Celestial.exportPNG = function() {
-  return exportPNG();
-};
