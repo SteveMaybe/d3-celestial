@@ -289,9 +289,21 @@ Celestial.display = function(config, callback = null) {
           handleDsos(err, charts[6]);
           handleDsoNames(err, charts[7]);
           handleSolarObjects(err, charts[8]);
-          if (!!callback) {
-            callback();
-          }
+          d3.queue()
+              .defer(handleMilkyWayOutline, err, charts[0])
+              .defer(handleConstellations, err, charts[1])
+              .defer(handleConstellationBoundaries, err, charts[2])
+              .defer(handleConstellationLines, err, charts[3])
+              .defer(handleStars, err, charts[4])
+              .defer(handleStarNames, err, charts[5])
+              .defer(handleDsos, err, charts[6])
+              .defer(handleDsoNames, err, charts[7])
+              .defer(handleSolarObjects, err, charts[8])
+              .await(() => {
+                if (!!callback) {
+                  callback();
+                }
+              });
         });
 
     if (Celestial.data.length > 0) { 
