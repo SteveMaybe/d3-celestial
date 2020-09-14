@@ -149,7 +149,7 @@ Celestial.display = function(config, callback = null) {
     }
 
     //Milky way outline
-    let handleMilkyWayOutline = function(error, json) {
+    let handleMilkyWayOutline = function(error, json, c) {
       if (error) {
         window.alert("Data file could not be loaded or doesn't exist. See readme.md");
         return console.warn(error);
@@ -167,10 +167,11 @@ Celestial.display = function(config, callback = null) {
           .enter().append("path")
           .attr("class", "mwbg");
       redraw();
+      c(null);
     };
 
     //Constellation names or designation
-    let handleConstellations = function(error, json) {
+    let handleConstellations = function(error, json, c) {
       if (error) return console.warn(error);
 
       var con = getData(json, cfg.transform);
@@ -181,10 +182,11 @@ Celestial.display = function(config, callback = null) {
 
       Celestial.constellations = getConstellationList(con);
       redraw();
+      c(null);
     };
 
     //Constellation boundaries
-    let handleConstellationBoundaries = function(error, json) {
+    let handleConstellationBoundaries = function(error, json, c) {
       if (error) return console.warn(error);
 
       //var cb = getData(topojson.feature(json, json.objects.constellations_bounds), cfg.transform);
@@ -195,10 +197,11 @@ Celestial.display = function(config, callback = null) {
           .enter().append("path")
           .attr("class", "boundaryline");
       redraw();
+      c(null);
     };
 
     //Constellation lines
-    let handleConstellationLines = function(error, json) {
+    let handleConstellationLines = function(error, json, c) {
       if (error) return console.warn(error);
 
       var conl = getData(json, cfg.transform);
@@ -210,10 +213,11 @@ Celestial.display = function(config, callback = null) {
 
       listConstellations();
       redraw();
+      c(null);
     };
 
     //Stars
-    let handleStars = function(error, json) {
+    let handleStars = function(error, json, c) {
       if (error) return console.warn(error);
 
       var st = getData(json, cfg.transform);
@@ -223,19 +227,21 @@ Celestial.display = function(config, callback = null) {
           .enter().append("path")
           .attr("class", "star");
       redraw();
+      c(null);
     };
 
 
 
     //Star names
-    let handleStarNames = function(error, json) {
+    let handleStarNames = function(error, json, c) {
       if (error) return console.warn(error);
       Object.assign(starnames, json);
       redraw();
+      c(null);
     };
 
     //Deep space objects
-    let handleDsos = function(error, json) {
+    let handleDsos = function(error, json, c) {
       if (error) return console.warn(error);
 
       var ds = getData(json, cfg.transform);
@@ -245,18 +251,20 @@ Celestial.display = function(config, callback = null) {
           .enter().append("path")
           .attr("class", "dso" );
       redraw();
+      c(null);
     };
 
     //DSO names
 
-    let handleDsoNames = function(error, json) {
+    let handleDsoNames = function(error, json, c) {
       if (error) return console.warn(error);
       Object.assign(dsonames, json);
       redraw();
+      c(null);
     };
 
     //Planets, Sun & Moon
-    let handleSolarObjects = function(error, json) {
+    let handleSolarObjects = function(error, json, c) {
       if (error) return console.warn(error);
 
       var pl = getPlanets(json, cfg.transform);
@@ -266,6 +274,7 @@ Celestial.display = function(config, callback = null) {
           .enter().append("path")
           .attr("class", "planet");
       redraw();
+      c(null);
     };
     console.log("Starting loading json");
     d3.queue()
