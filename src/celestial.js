@@ -265,7 +265,6 @@ Celestial.display = function(config, callback = null) {
           .attr("class", "planet");
       c(null);
     };
-    console.log("Starting loading json");
     d3.queue()
         .defer(d3.json, path + "mw.json")
         .defer(d3.json, path + filename("constellations"))
@@ -277,7 +276,6 @@ Celestial.display = function(config, callback = null) {
         .defer(d3.json, path + filename("dsonames"))
         .defer(d3.json, path + filename("planets"))
         .await(function(err, ...charts) {
-          console.log("Done loading json");
           d3.queue()
               .defer(handleMilkyWayOutline, err, charts[0])
               .defer(handleConstellations, err, charts[1])
@@ -289,14 +287,12 @@ Celestial.display = function(config, callback = null) {
               .defer(handleDsoNames, err, charts[7])
               .defer(handleSolarObjects, err, charts[8])
               .await(function(err, ...v) {
-                console.log("Done applying transforms");
                 redraw();
                 if (!!callback) {
                   callback();
                 }
               });
         });
-    console.log("Done async block");
 
     if (Celestial.data.length > 0) { 
       Celestial.data.forEach( function(d) {
@@ -555,8 +551,8 @@ Celestial.display = function(config, callback = null) {
     if (cfg.constellations.lines) { 
       container.selectAll(parentElement + " .constline").each(function(d) { 
         setStyleA(d.properties.rank, cfg.constellations.lineStyle);
-        console.log(cfg.constellations.lineStyle);
-        map(d); 
+        console.log(d);
+        map(d);
         context.stroke(); 
       });
     }
@@ -760,7 +756,6 @@ Celestial.display = function(config, callback = null) {
     context.textBaseline = s.baseline || "bottom";
     context.lineCap = "round";
     context.lineJoin  = "round";
-    context.setLineDash([12, 3, 3]);
     context.beginPath();
   }
 
