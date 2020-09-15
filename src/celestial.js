@@ -760,6 +760,7 @@ Celestial.display = function(config, callback = null) {
     context.textBaseline = s.baseline || "bottom";
     context.lineCap = "round";
     context.lineJoin  = "round";
+    context.setLineDash([12, 3, 3]);
     context.beginPath();
   }
 
