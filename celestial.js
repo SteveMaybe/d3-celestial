@@ -552,7 +552,6 @@ Celestial.display = function(config, callback = null) {
     if (cfg.constellations.lines) { 
       container.selectAll(parentElement + " .constline").each(function(d) { 
         setStyleA(d.properties.rank, cfg.constellations.lineStyle);
-        console.log(map);
         map(d);
         context.stroke(); 
       });
