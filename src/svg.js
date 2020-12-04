@@ -44,7 +44,7 @@ function exportSVG(fname) {
 
   var q = d3.queue(2);
   
-  groups.background.append("path").datum(circle).attr("class", "background").attr("d", map); 
+  // SR groups.background.append("path").datum(circle).attr("class", "background").attr("d", map);
   styles.background.fill = cfg.background.fill;
 
   if (cfg.lines.graticule.show) {
@@ -183,21 +183,6 @@ function exportSVG(fname) {
       });
     });
   }
-
-  // Map border
-  q.defer(function(callback) {
-    var rot = projection.rotate();
-    projection.rotate([0,0,0]);
-    groups.mapBorder.append("path")
-     .datum(graticule.outline)
-     .attr("class", "mapBorder")
-     .attr("d", map);
-     
-    styles.mapBorder = {"fill": "none", "stroke": cfg.background.stroke, "stroke-width": cfg.background.width, "stroke-opacity": 1, "stroke-dasharray": "none" };
-
-    projection.rotate(rot);
-    callback(null);
-  });  
   
   //Constellation names or designation
   if (cfg.constellations.names) { 
