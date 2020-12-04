@@ -510,7 +510,7 @@ function exportSVG(fname) {
     var cult = (has(formats[what], culture)) ? "." + culture : "";
     ext = ext ? "." + ext : ".json";
     sub = sub ? "." + sub : "";
-    return what + sub + cult + ext;
+    return "/" + what + sub + cult + ext;
   }
 
   function svgStyle(s) {
