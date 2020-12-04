@@ -90,7 +90,7 @@ function exportSVG(fname) {
         if (error) callback(error);
 
         var cons = getData(json, cfg.transform);
-        
+        console.log(cons);
         groups.stars.selectAll(".stars")
           .data(cons.features.filter( function(d) {
             return d.properties.mag <= cfg.stars.limit; 

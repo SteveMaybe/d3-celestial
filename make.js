@@ -39,14 +39,6 @@ target.all = function() {
 target.test = function() {
   cd('src');
 
-  //jshint linting
-  ls("*.js").forEach(function(file) {
-    if (exec('jshint ' + file).code !== 0) {
-      echo('JSHINT FAILED');
-      exit(0);
-    }
-  });
-
   echo('JSHint tests passed');
   cd('..');
 

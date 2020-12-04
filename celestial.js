@@ -4635,109 +4635,7 @@ function exportSVG(fname) {
   var q = d3.queue(2);
   
   // SR groups.background.append("path").datum(circle).attr("class", "background").attr("d", map);
-  styles.background.fill = cfg.background.fill;
-
-  if (cfg.lines.graticule.show) {
-    if (cfg.transform === "equatorial") {
-      groups.gridLines.append("path").datum(graticule)
-       .attr("class", "gridLines")
-       .attr("d", map);
-      styles.gridLines = svgStyle(cfg.lines.graticule);
-    } else {
-      Celestial.graticule(groups.gridLines, map, cfg.transform);
-      styles.gridLines = svgStyle(cfg.lines.graticule);
-    }
-    if (has(cfg.lines.graticule, "lon") && cfg.lines.graticule.lon.pos.length > 0) {
-      var jlon = {type: "FeatureCollection", features: getGridValues("lon", cfg.lines.graticule.lon.pos)};      
-      groups.gridvaluesLon.selectAll(".gridvalues_lon")
-        .data(jlon.features)
-        .enter().append("text")
-        .attr("transform", function(d, i) { return point(d.geometry.coordinates); })
-        .text( function(d) { return d.properties.value; } )
-        .attr({dy: ".5em", dx: "-.75em", class: "gridvaluesLon"});
-      styles.gridvaluesLon = svgTextStyle(cfg.lines.graticule.lon); 
-    }
-    if (has(cfg.lines.graticule, "lat") && cfg.lines.graticule.lat.pos.length > 0) {
-      var jlat = {type: "FeatureCollection", features: getGridValues("lat", cfg.lines.graticule.lat.pos)};
-      groups.gridvaluesLat.selectAll(".gridvalues_lat")
-        .data(jlat.features)
-        .enter().append("text")
-        .attr("transform", function(d, i) { return point(d.geometry.coordinates); })
-        .text( function(d) { return d.properties.value; } )
-        .attr({dy: "-.5em", dx: "-.75em", class: "gridvaluesLat"});
-       styles.gridvaluesLat = svgTextStyle(cfg.lines.graticule.lat); 
-    }
-  }
-
-  //Celestial planes
-  for (var key in cfg.lines) {
-    if (has(cfg.lines, key) && key != "graticule" && cfg.lines[key].show !== false) { 
-      id = "planes" + key;
-      groups[id].append("path")
-         .datum(d3.geo.circle().angle([90]).origin(poles[key]) )
-         .attr("class", id)
-         .attr("d", map);
-      styles[id] = svgStyle(cfg.lines[key]);
-    }
-  }
-
-  //Milky way outline
-  if (cfg.mw.show) {
-    q.defer(function(callback) { 
-      d3.json(path + "/" + "mw.json", function(error, json) {
-        if (error) callback(error);
-        var mw = getData(json, cfg.transform);
-        var mw_back = getMwbackground(mw);
-        
-        groups.milkyWay.selectAll(".mway")
-         .data(mw.features)
-         .enter().append("path")
-         .attr("class", "milkyWay")
-         .attr("d", map);
-        styles.milkyWay = svgStyle(cfg.mw.style);
-        
-        if (!has(cfg.background, "opacity") || cfg.background.opacity > 0.95) {
-          groups.milkyWayBg.selectAll(".mwaybg")
-           .data(mw_back.features)
-           .enter().append("path")
-           .attr("class", "milkyWayBg")
-           .attr("d", map);
-          styles.milkyWayBg = {"fill": cfg.background.fill, 
-                   "fill-opacity": cfg.background.opacity };
-        }
-        callback(null);
-      });
-    });
-  }
-
-  //Constellation boundaries
-  if (cfg.constellations.bounds) { 
-    q.defer(function(callback) { 
-      d3.json(path + filename("constellations", "borders"), function(error, json) {
-        if (error) callback(error);
-
-        var conb = getData(json, cfg.transform);
-        if (Celestial.constellation) {
-          var re = new RegExp("\\b" + Celestial.constellation + "\\b");
-        }
-
-        groups.constBoundaries.selectAll(".bounds")
-         .data(conb.features)
-         .enter().append("path")
-         .attr("class", function(d) { return (Celestial.constellation && d.ids.search(re) !== -1) ? "constBoundariesSel" : "constBoundaries"; }) 
-         .attr("d", map);
-
-        styles.constBoundaries = svgStyle(cfg.constellations.boundStyle);
-        styles.constBoundariesSel = {"fill": "none",
-            "stroke": cfg.constellations.boundStyle.stroke, 
-            "stroke-width": cfg.constellations.boundStyle.width * 1.5,
-            "stroke-opacity": 1,
-            "stroke-dasharray": "none"};
-        
-        callback(null);
-      });
-    });
-  }
+  //styles.background.fill = cfg.background.fill;
 
   //Constellation lines
   if (cfg.constellations.lines) { 
@@ -4746,6 +4644,7 @@ function exportSVG(fname) {
         if (error) callback(error);
 
         var conl = getData(json, cfg.transform);
+        console.log(conl);
         groups.constLines.selectAll(".lines")
          .data(conl.features)
          .enter().append("path")
@@ -4774,39 +4673,6 @@ function exportSVG(fname) {
     });
   }
   
-  //Constellation names or designation
-  if (cfg.constellations.names) { 
-    q.defer(function(callback) { 
-      d3.json(path + filename("constellations"), function(error, json) {
-        if (error) callback(error);
-
-        var conn = getData(json, cfg.transform);
-        groups.constNames.selectAll(".constnames")
-         .data(conn.features.filter( function(d) {
-            return clip(d.geometry.coordinates) === 1; 
-          }))
-         .enter().append("text")
-         .attr("class", function(d) { return "constNames" + d.properties.rank; })
-         .attr("transform", function(d, i) { return point(d.geometry.coordinates); })
-         .text( function(d) { return constName(d); } ); 
- 
-        styles.constNames1 = {"fill": cfg.constellations.nameStyle.fill[0],
-                              "fill-opacity": cfg.constellations.nameStyle.opacity[0],
-                              "font": cfg.constellations.nameStyle.font[0],
-                              "text-anchor": svgAlign(cfg.constellations.nameStyle.align)};
-        styles.constNames2 = {"fill": cfg.constellations.nameStyle.fill[1],
-                              "fill-opacity": cfg.constellations.nameStyle.opacity[1],
-                              "font": cfg.constellations.nameStyle.font[1],
-                              "text-anchor": svgAlign(cfg.constellations.nameStyle.align)};
-        styles.constNames3 = {"fill": cfg.constellations.nameStyle.fill[2],
-                              "fill-opacity": cfg.constellations.nameStyle.opacity[2],
-                              "font": cfg.constellations.nameStyle.font[2],
-                              "text-anchor": svgAlign(cfg.constellations.nameStyle.align)};
-        callback(null);
-      });
-    });
-  }
-  
   //Stars
   if (cfg.stars.show) { 
     q.defer(function(callback) { 
@@ -4814,14 +4680,14 @@ function exportSVG(fname) {
         if (error) callback(error);
 
         var cons = getData(json, cfg.transform);
-        
+        console.log(cons);
         groups.stars.selectAll(".stars")
           .data(cons.features.filter( function(d) {
             return d.properties.mag <= cfg.stars.limit; 
           }))
           .enter().append("path")
           .attr("class", function(d) { return "stars" + starColor(d.properties.bv); })
-          .attr("d", map.pointRadius( function(d) {
+            .attr("d", map.pointRadius( function(d) {
             return d.properties ? starSize(d.properties.mag) : 1;
           }));
 
