@@ -94,7 +94,7 @@ function exportSVG(fname) {
   //Milky way outline
   if (cfg.mw.show) {
     q.defer(function(callback) { 
-      d3.json(path + "mw.json", function(error, json) {
+      d3.json(path + "/" + "mw.json", function(error, json) {
         if (error) callback(error);
         var mw = getData(json, cfg.transform);
         var mw_back = getMwbackground(mw);
@@ -235,7 +235,7 @@ function exportSVG(fname) {
   //Stars
   if (cfg.stars.show) { 
     q.defer(function(callback) { 
-      d3.json(path +  cfg.stars.data, function(error, json) {
+      d3.json(path + "/" +  cfg.stars.data, function(error, json) {
         if (error) callback(error);
 
         var cons = getData(json, cfg.transform);
@@ -287,7 +287,7 @@ function exportSVG(fname) {
   //Deep space objects
   if (cfg.dsos.show) { 
     q.defer(function(callback) { 
-      d3.json(path +  cfg.dsos.data, function(error, json) {
+      d3.json(path + "/" +  cfg.dsos.data, function(error, json) {
         if (error) callback(error);
 
         var cond = getData(json, cfg.transform);
