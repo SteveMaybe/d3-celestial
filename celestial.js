@@ -4662,7 +4662,7 @@ function exportSVG(fname) {
             let length = inner.length;
 
             for (const pt in inner) {
-              if (clip(pt)) {
+              if (clip(fx(pt))) {
                 gcode += "(Home to next Carve Cycle and Drop cutter)" + "\n";
                 gcode += `G00 ${fx(inner[0])} Z1` + "\n";
                 gcode += `G01 ${fx(inner[0])} Z0 F10` + "\n";
@@ -4672,7 +4672,7 @@ function exportSVG(fname) {
 
             let last = null;
             inner.forEach(point => {
-              if (clip(point)) {
+              if (clip(fx(point))) {
                 gcode += `G01 ${fx(point)} Z0.0 F100` + "\n"
                 last = point;
               }
