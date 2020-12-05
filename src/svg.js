@@ -73,9 +73,15 @@ function exportSVG(fname) {
             gcode += "(Home to next Carve Cycle and Drop cutter)" + "\n";
             gcode += `G00 ${fx(inner[0])} Z1` + "\n";
             gcode += `G01 ${fx(inner[0])} Z0 F10` + "\n";
-            inner.forEach(point => { gcode += `G01 ${fx(point)} Z0.0 F100` + "\n" })
+            let last = null;
+            inner.forEach(point => {
+              if (clip(point)) {
+                gcode += `G01 ${fx(point)} Z0.0 F100` + "\n"
+                last = point;
+              }
+            });
             gcode += "(Raise tool)" + "\n";
-            gcode += `G00 ${inner[length - 1]} Z1` + "\n";
+            gcode += `G00 ${last} Z1` + "\n";
           });
         });
 
