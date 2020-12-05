@@ -65,6 +65,10 @@ function exportSVG(fname) {
           return `X${pts[0] * scale} Y${pts[1] * scale}`
         };
 
+        const checkPtValid = (v) => {
+          return clip(projection(v));
+        };
+
         conl.features.forEach(v => {
           gcode += "(Carve Cycle)" + "\n";
           v.geometry.coordinates.forEach(inner => {
@@ -72,7 +76,7 @@ function exportSVG(fname) {
             let length = inner.length;
 
             for (const pt in inner) {
-              if (clip(fx(pt))) {
+              if (checkPtValid(pt)) {
                 gcode += "(Home to next Carve Cycle and Drop cutter)" + "\n";
                 gcode += `G00 ${fx(inner[0])} Z1` + "\n";
                 gcode += `G01 ${fx(inner[0])} Z0 F10` + "\n";
@@ -82,7 +86,7 @@ function exportSVG(fname) {
 
             let last = null;
             inner.forEach(point => {
-              if (clip(fx(point))) {
+              if (checkPtValid(point)) {
                 gcode += `G01 ${fx(point)} Z0.0 F100` + "\n"
                 last = point;
               }
