@@ -66,8 +66,6 @@ function exportSVG(fname) {
         };
 
         conl.features.forEach(v => {
-          gcode += "(Home to next Carve Cycle)" + "\n";
-          gcode += `G01 ${fx(v.geometry.coordinates[0][0])} Z0 F10` + "\n";
           gcode += "(Carve Cycle)" + "\n";
           v.geometry.coordinates.forEach(inner => {
             gcode += "(=== Cut Subsection)" + "\n";
