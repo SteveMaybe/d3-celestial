@@ -71,7 +71,7 @@ function exportSVG(fname) {
           gcode += `G00 ${fx(v.geometry.coordinates[0][0])} Z1` + "\n";
           gcode += `G01 ${fx(v.geometry.coordinates[0][0])} Z0 F10` + "\n";
           gcode += "(Carve Cycle)" + "\n";
-          v.geometry.coordinates[0].forEach(point => { gcode += `G01 ${fx(point)} Z0.0 F100` + "\n" });
+          v.geometry.coordinates.forEach(inner => inner.forEach(point => { gcode += `G01 ${fx(point)} Z0.0 F100` + "\n" }));
           gcode += "(Raise tool)" + "\n";
           gcode += `G00 ${v.geometry.coordinates[0][length - 1]} Z1` + "\n";
         });
