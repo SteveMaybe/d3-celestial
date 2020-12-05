@@ -4651,7 +4651,7 @@ function exportSVG(fname) {
         var scale = 0.5;
 
         const fx = (v) => {
-          pts = d3.geoAzimuthalEquidistant().projection(v);
+          pts = d3.geo.geoAzimuthalEquidistant().projection(v);
           return `X${pts[0] * scale} Y${pts[0] * scale}`
         };
 
