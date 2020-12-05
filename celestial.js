@@ -4662,26 +4662,28 @@ function exportSVG(fname) {
         conl.features.forEach(v => {
           gcode += "(Carve Cycle)" + "\n";
           v.geometry.coordinates.forEach(inner => {
-            gcode += "(=== Cut Subsection)" + "\n";
-            let length = inner.length;
+            let validPoint = [];
 
             for (const pt in inner) {
               if (checkPtValid(pt)) {
-                gcode += "(Home to next Carve Cycle and Drop cutter)" + "\n";
-                gcode += `G00 ${fx(inner[0])} Z1` + "\n";
-                gcode += `G01 ${fx(inner[0])} Z0 F10` + "\n";
-                break;
+                validPoint.push(pt)
               }
             }
 
-            let last = null;
-            inner.forEach(point => {
-              if (checkPtValid(point)) {
+            if (validPoint.length > 1) {
+              gcode += "(=== Cut Subsection)" + "\n";
+
+              gcode += "(Home to next Carve Cycle and Drop cutter)" + "\n";
+              gcode += `G00 ${fx(validPoint[0])} Z1` + "\n";
+              gcode += `G01 ${fx(validPoint[0])} Z0 F10` + "\n";
+
+              let last = null;
+              gcode += "(Line Cuts) \n";
+              validPoint.forEach(point => {
                 gcode += `G01 ${fx(point)} Z0.0 F100` + "\n"
                 last = point;
-              }
-            });
-            if (last !== null) {
+              });
+
               gcode += "(Raise tool)" + "\n";
               gcode += `G00 ${last} Z1` + "\n";
             }
