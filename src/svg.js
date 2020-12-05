@@ -95,7 +95,7 @@ function exportSVG(fname) {
               });
 
               gcode += "(Raise tool)" + "\n";
-              gcode += `G00 ${last} Z1` + "\n";
+              gcode += `G00 ${fx(last)} Z1` + "\n";
             }
           });
         });
