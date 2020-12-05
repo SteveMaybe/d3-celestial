@@ -14,7 +14,7 @@ function getData(d, trans) {
 
   for (var i=0; i<f.length; i++)
     f[i].geometry.coordinates = translate(f[i], leo);
-  
+
   return d;
 }
 

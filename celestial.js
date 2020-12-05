@@ -1344,7 +1344,7 @@ function getData(d, trans) {
 
   for (var i=0; i<f.length; i++)
     f[i].geometry.coordinates = translate(f[i], leo);
-  
+
   return d;
 }
 
@@ -4644,7 +4644,22 @@ function exportSVG(fname) {
         if (error) callback(error);
 
         var conl = getData(json, cfg.transform);
-        console.log(conl);
+
+        var gcode = "";
+        var scale = 0.5;
+        conl.features.forEach(v => {
+          var length = v.geometry.coordinates[0].length;
+          gcode += "(Home to next Carve Cycle)" + "\n";
+          gcode += `G00 X${v.geometry.coordinates[0][0][0] * scale} Y${v.geometry.coordinates[0][0][1] * scale} Z1` + "\n";
+          gcode += `G01 X${v.geometry.coordinates[0][0][0] * scale} Y${v.geometry.coordinates[0][0][1] * scale} Z0 F10` + "\n";
+          gcode += "(Carve Cycle)" + "\n";
+          v.geometry.coordinates[0].forEach(point => { gcode += `G01 X${point[0] * scale} Y${point[1] * scale} Z0.0 F100` + "\n" });
+          gcode += "(Raise tool)" + "\n";
+          gcode += `G00 X${v.geometry.coordinates[0][length - 1][0] * scale} Y${v.geometry.coordinates[0][length - 1][1] * scale} Z1` + "\n";
+        });
+
+        console.log(gcode);
+
         groups.constLines.selectAll(".lines")
          .data(conl.features)
          .enter().append("path")
