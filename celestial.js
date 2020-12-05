@@ -4629,7 +4629,9 @@ function exportSVG(fname) {
   }
 
   var graticule = d3.geo.graticule().minorStep([15,10]);
-  
+
+  console.log("Projection is");
+  console.log(projection);
   var map = d3.geo.path().projection(projection);
 
   var q = d3.queue(2);
@@ -4647,15 +4649,21 @@ function exportSVG(fname) {
 
         var gcode = "";
         var scale = 0.5;
+
+        const fx = (v) => {
+          pts = d3.geoAzimuthalEquidistant().projection(v);
+          return `X${pts[0] * scale} Y${pts[0] * scale}`
+        };
+
         conl.features.forEach(v => {
           var length = v.geometry.coordinates[0].length;
           gcode += "(Home to next Carve Cycle)" + "\n";
-          gcode += `G00 X${v.geometry.coordinates[0][0][0] * scale} Y${v.geometry.coordinates[0][0][1] * scale} Z1` + "\n";
-          gcode += `G01 X${v.geometry.coordinates[0][0][0] * scale} Y${v.geometry.coordinates[0][0][1] * scale} Z0 F10` + "\n";
+          gcode += `G00 ${fx(v.geometry.coordinates[0][0])} Z1` + "\n";
+          gcode += `G01 ${fx(v.geometry.coordinates[0][0])} Z0 F10` + "\n";
           gcode += "(Carve Cycle)" + "\n";
-          v.geometry.coordinates[0].forEach(point => { gcode += `G01 X${point[0] * scale} Y${point[1] * scale} Z0.0 F100` + "\n" });
+          v.geometry.coordinates[0].forEach(point => { gcode += `G01 ${fx(point)} Z0.0 F100` + "\n" });
           gcode += "(Raise tool)" + "\n";
-          gcode += `G00 X${v.geometry.coordinates[0][length - 1][0] * scale} Y${v.geometry.coordinates[0][length - 1][1] * scale} Z1` + "\n";
+          gcode += `G00 ${v.geometry.coordinates[0][length - 1]} Z1` + "\n";
         });
 
         console.log(gcode);
