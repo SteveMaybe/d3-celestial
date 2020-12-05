@@ -66,7 +66,7 @@ function exportSVG(fname) {
         };
 
         const checkPtValid = (v) => {
-          return clip(projection(v));
+          return clip(v) === 1;
         };
 
         conl.features.forEach(v => {
@@ -91,8 +91,10 @@ function exportSVG(fname) {
                 last = point;
               }
             });
-            gcode += "(Raise tool)" + "\n";
-            gcode += `G00 ${last} Z1` + "\n";
+            if (last !== null) {
+              gcode += "(Raise tool)" + "\n";
+              gcode += `G00 ${last} Z1` + "\n";
+            }
           });
         });
 
