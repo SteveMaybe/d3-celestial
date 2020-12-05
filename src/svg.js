@@ -70,9 +70,16 @@ function exportSVG(fname) {
           v.geometry.coordinates.forEach(inner => {
             gcode += "(=== Cut Subsection)" + "\n";
             let length = inner.length;
-            gcode += "(Home to next Carve Cycle and Drop cutter)" + "\n";
-            gcode += `G00 ${fx(inner[0])} Z1` + "\n";
-            gcode += `G01 ${fx(inner[0])} Z0 F10` + "\n";
+
+            for (const pt in inner) {
+              if (clip(pt)) {
+                gcode += "(Home to next Carve Cycle and Drop cutter)" + "\n";
+                gcode += `G00 ${fx(inner[0])} Z1` + "\n";
+                gcode += `G01 ${fx(inner[0])} Z0 F10` + "\n";
+                break;
+              }
+            }
+
             let last = null;
             inner.forEach(point => {
               if (clip(point)) {
