@@ -58,7 +58,7 @@ function exportSVG(fname) {
         var conl = getData(json, cfg.transform);
 
         var gcode = "";
-        var scale = 0.5;
+        var scale = 1;
 
         const fx = (v) => {
           pts = projection(v);
