@@ -74,7 +74,7 @@ function exportSVG(fname) {
           v.geometry.coordinates.forEach(inner => {
             let validPoint = [];
 
-            for (const pt in inner) {
+            for (const pt of inner) {
               if (checkPtValid(pt)) {
                 validPoint.push(pt)
               }
