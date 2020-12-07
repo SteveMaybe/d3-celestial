@@ -4648,8 +4648,14 @@ function exportSVG(fname) {
         var conl = getData(json, cfg.transform);
 
         var gcode = "";
-        var scale = .1;
+        var scale = .015;
+        var laser = true;
 
+        var feed = "F100";
+
+        if (laser) {
+          feed = "F1000"
+        }
         const fx = (v) => {
           pts = projection(v);
           return `X${pts[0] * scale} Y${pts[1] * scale}`
@@ -4676,16 +4682,21 @@ function exportSVG(fname) {
               gcode += "(Home to next Carve Cycle and Drop cutter)" + "\n";
               gcode += `G00 ${fx(validPoint[0])} Z1` + "\n";
               gcode += `G01 ${fx(validPoint[0])} Z0 F10` + "\n";
-
+              if (laser) {
+                gcode += "S1 \n"
+              }
               let last = null;
               gcode += "(Line Cuts) \n";
               validPoint.forEach(point => {
-                gcode += `G01 ${fx(point)} Z0.0 F100` + "\n"
+                gcode += `G01 ${fx(point)} Z0.0 ${feed}` + "\n"
                 last = point;
               });
 
               gcode += "(Raise tool)" + "\n";
               gcode += `G00 ${fx(last)} Z1` + "\n";
+              if (laser) {
+                gcode += "S0 \n"
+              }
             }
           });
         });
