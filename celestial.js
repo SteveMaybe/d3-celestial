@@ -6682,7 +6682,7 @@ d3.svg.customSymbol = function() {
     return symbol;
 };
 
-Celestial.exportSVG = function(callback) {
+Celestial.dump_raw = function(callback) {
     dump(callback);
 };
 this.Celestial = Celestial;
