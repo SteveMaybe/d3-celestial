@@ -6016,6 +6016,11 @@ function dump(callback) {
                     return `X${pts[0] - 1000} Y${pts[1] - 1000}`
                 };
 
+                const tPoint = (v) => {
+                    pts = projection(v);
+                    return [pts[0] - 1000, pts[1] - 1000]
+                };
+
                 const checkPtValid = (v) => {
                     return clip(v) === 1;
                 };
@@ -6024,15 +6029,17 @@ function dump(callback) {
                     gcode += "(Carve Cycle)" + "\n";
                     v.geometry.coordinates.forEach(inner => {
                         let validPoint = [];
+                        let tValidPoint = []; // transformed pts;
 
                         for (const pt of inner) {
                             if (checkPtValid(pt)) {
-                                validPoint.push(pt)
+                                validPoint.push(pt);
+                                tValidPoint.push(tPoint(pt))
                             }
                         }
 
-                        if (validPoint.length > 1) {
-                            raw_data.push(validPoint); // add all
+                        if (tValidPoint.length > 1) {
+                            raw_data.push(tValidPoint); // add all
 
                             gcode += "(=== Cut Subsection)" + "\n";
 
