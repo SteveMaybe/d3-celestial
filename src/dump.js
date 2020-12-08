@@ -117,6 +117,7 @@ function dump(callback) {
 
                 // SR Abort!
                 callback(raw_data);
+                return;
 
                 console.log(gcode);
 
