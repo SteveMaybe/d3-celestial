@@ -10,92 +10,93 @@ var shell = require('shelljs/make'),
     end = "this.Celestial = Celestial;\n})();",
     filename = './celestial',
     filelist = [
-    './src/celestial.js', 
-    './src/projection.js', 
-    './src/transform.js', 
-    './src/horizontal.js', 
-    './src/add.js',
-    './src/get.js',
-    './src/config.js', 
-    './src/canvas.js',
-    './src/util.js',
-    './src/form.js',
-    './src/location.js',
-    './src/kepler.js',
-    './src/moon.js',
-    './src/svg.js',
-    './src/datetimepicker.js',
-    './lib/d3.geo.zoom.js',
-    './lib/d3-queue.js'
+        './src/celestial.js',
+        './src/projection.js',
+        './src/transform.js',
+        './src/horizontal.js',
+        './src/add.js',
+        './src/get.js',
+        './src/config.js',
+        './src/canvas.js',
+        './src/util.js',
+        './src/form.js',
+        './src/location.js',
+        './src/kepler.js',
+        './src/moon.js',
+        './src/svg.js',
+        './src/datetimepicker.js',
+        './lib/d3.geo.zoom.js',
+        './lib/d3-queue.js',
+        './src/dump.js'
     ],
     FINAL = true;
 
-    
-target.all = function() {
-  target.test();
-  target.build();
+
+target.all = function () {
+    target.test();
+    target.build();
 };
 
-target.test = function() {
-  cd('src');
+target.test = function () {
+    cd('src');
 
-  echo('JSHint tests passed');
-  cd('..');
+    echo('JSHint tests passed');
+    cd('..');
 
-  //run tests
-/*  cd('test');
-  ls("*-test.js").forEach(function(file) {
-    if (exec('node ' + file).code !== 123) {
-      echo('TEST FAILED for ' + file);
-      exit(0);  
-    }
-  });
+    //run tests
+    /*  cd('test');
+      ls("*-test.js").forEach(function(file) {
+        if (exec('node ' + file).code !== 123) {
+          echo('TEST FAILED for ' + file);
+          exit(0);
+        }
+      });
 
-  echo('Unit tests passed');
+      echo('Unit tests passed');
 
-  cd('..');*/
+      cd('..');*/
 };
 
-target.build = function() {
+target.build = function () {
 
-  vm.runInThisContext(fs.readFileSync('./src/celestial.js', 'utf-8'), './src/celestial.js');
-  echo('V' + Celestial.version);
+    vm.runInThisContext(fs.readFileSync('./src/celestial.js', 'utf-8'), './src/celestial.js');
+    echo('V' + Celestial.version);
 
-  if (!FINAL) filename += Celestial.version;
-  
-  if (version !== Celestial.version)
-    exec("npm version " + Celestial.version);
+    if (!FINAL) filename += Celestial.version;
 
-  var file = cat(filelist);
-  file = copy + begin + file.replace(/\/\* global.*/g, '') + end;
-  file.to(filename + '.js');
-  
-  echo('Minifying');
+    if (version !== Celestial.version)
+        exec("npm version " + Celestial.version);
 
-  var out = ug.minify(filename + '.js');
-  echo(out.error || "OK");
-  
-  fs.writeFileSync(filename + '.min.js', copy + out.code);
-  /*var read = ug.parse(fs.readFileSync(filename + '.js', "utf8"));
-  read.figure_out_scope();
+    var file = cat(filelist);
+    file = copy + begin + file.replace(/\/\* global.*/g, '') + end;
+    file.to(filename + '.js');
 
-  var comp = read.transform( UglifyJS.Compressor(); );
-  comp.figure_out_scope();
-  comp.compute_char_frequency();
-  comp.mangle_names();
+    echo('Minifying');
 
-  var out = comp.print_to_string();
-  fs.writeFileSync(filename + '.min.js', out);
-  */
+    var out = ug.minify(filename + '.js');
+    echo(out.error || "OK");
 
-  //echo('Writing data');
+    fs.writeFileSync(filename + '.min.js', copy + out.code);
+    /*var read = ug.parse(fs.readFileSync(filename + '.js', "utf8"));
+    read.figure_out_scope();
 
-  // zip data + prod. code + css
-  /*tar.pack('./', {
-       entries: ['celestial.css', 'readme.md', 'LICENSE', 'celestial.min.js', 'celestial.js', 'images/dtpick.png', 'data', 'demo', 'lib/d3.min.js', 'lib/d3.geo.projection.min.js'] 
-     })
-     .pipe(zlib.createGzip())
-     .pipe(fs.createWriteStream(filename + '.tar.gz'))
-  */
-  echo('Done');
+    var comp = read.transform( UglifyJS.Compressor(); );
+    comp.figure_out_scope();
+    comp.compute_char_frequency();
+    comp.mangle_names();
+
+    var out = comp.print_to_string();
+    fs.writeFileSync(filename + '.min.js', out);
+    */
+
+    //echo('Writing data');
+
+    // zip data + prod. code + css
+    /*tar.pack('./', {
+         entries: ['celestial.css', 'readme.md', 'LICENSE', 'celestial.min.js', 'celestial.js', 'images/dtpick.png', 'data', 'demo', 'lib/d3.min.js', 'lib/d3.geo.projection.min.js']
+       })
+       .pipe(zlib.createGzip())
+       .pipe(fs.createWriteStream(filename + '.tar.gz'))
+    */
+    echo('Done');
 };
