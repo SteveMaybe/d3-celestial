@@ -1,6 +1,6 @@
 /* global d3, Celestial, projections, poles, getData, getPlanet, getMwbackground, getAngles, getWidth, getGridValues, has, isArray, halfπ, symbols, starnames, dsonames, bvcolor, settings, formats, transformDeg, euler, Round */
 
-function dump(callback) {
+function dump(done_func) {
     var doc = d3.select("body").append("div").attr("id", "d3-celestial-svg").attr("style", "display: none"),
         svg = d3.select("#d3-celestial-svg").append("svg"), //.attr("style", "display: none"),
         m = Celestial.metrics(),
@@ -51,7 +51,7 @@ function dump(callback) {
     //styles.background.fill = cfg.background.fill;
 
     //Constellation lines
-    var raw_data = []
+    var raw_data = [];
     if (cfg.constellations.lines) {
         q.defer(function(callback) {
             d3.json(path + filename("constellations", "lines"), function(error, json) {
@@ -123,7 +123,7 @@ function dump(callback) {
                 });
 
                 // SR Abort!
-                callback(raw_data);
+                done_func(raw_data);
                 return;
 
                 console.log(gcode);
