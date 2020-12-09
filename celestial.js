@@ -5973,20 +5973,12 @@ function dump(done_func) {
         d3.json(path + filename("constellations", "lines"), function (error, json) {
             var conl = getData(json, cfg.transform);
 
-
-
-            const checkPtValid = (v) => {
-                return clip(v) === 1;
-            };
-
             conl.features.forEach(v => {
                 v.geometry.coordinates.forEach(inner => {
                     let tValidPoint = []; // transformed pts;
 
                     for (const pt of inner) {
-                        if (checkPtValid(pt)) {
-                            tValidPoint.push(tPoint(pt))
-                        }
+                        tValidPoint.push(tPoint(pt))
                     }
 
                     if (tValidPoint.length > 1) {
