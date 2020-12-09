@@ -5950,10 +5950,9 @@ function dump(done_func) {
     proj = projections[cfg.projection];
     rotation = getAngles(cfg.center);
     center = [-rotation[0], -rotation[1]];
-    scale0 = proj.scale * m.width / 1024;
     projection = Celestial.projection(cfg.projection).rotate(rotation).translate([m.width / 2, m.height / 2]).scale([m.scale]);
-    adapt = cfg.adaptable ? Math.sqrt(m.scale / scale0) : 1;
     culture = (cfg.culture !== "" && cfg.culture !== "iau") ? cfg.culture : "";
+    scale = 1/m.scale;
 
     if (proj.clip) {
         projection.clipAngle(90);
@@ -5963,22 +5962,17 @@ function dump(done_func) {
 
     var raw_data = [];
 
+    const tPoint = (v) => {
+        pts = projection(v);
+        return [pts[0], pts[1]]
+    };
+
     //Constellation lines
     q.defer(function (callback) {
         d3.json(path + filename("constellations", "lines"), function (error, json) {
             var conl = getData(json, cfg.transform);
 
-            var scale = .001;
 
-            const fx = (v) => {
-                pts = projection(v);
-                return `X${pts[0] - 1000} Y${pts[1] - 1000}`
-            };
-
-            const tPoint = (v) => {
-                pts = projection(v);
-                return [pts[0] * scale - 1000 * scale, pts[1] * scale - 1000 * scale]
-            };
 
             const checkPtValid = (v) => {
                 return clip(v) === 1;
@@ -6011,6 +6005,8 @@ function dump(done_func) {
             var cons = getData(json, cfg.transform);
             cons = cons.features.filter(function (d) {
                 return d.properties.mag <= cfg.stars.designationLimit * adapt && clip(d.geometry.coordinates) === 1;
+            }).map(v => {
+                return tPoint(v.geometry.coordinates);
             });
             callback(null, cons);
         });
@@ -6033,7 +6029,6 @@ function dump(done_func) {
         sub = sub ? "." + sub : "";
         return "/" + what + sub + cult + ext;
     }
-
 }
 
 Celestial.dump_raw = function (callback) {
