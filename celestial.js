@@ -6001,7 +6001,7 @@ function dump(done_func) {
             });
 
             // SR Abort!
-            callback(raw_data);
+            callback(null, raw_data);
             done_func(raw_data);
         });
     }).defer(function (callback) {
@@ -6012,7 +6012,7 @@ function dump(done_func) {
             cons = cons.features.filter(function (d) {
                 return d.properties.mag <= cfg.stars.designationLimit * adapt && clip(d.geometry.coordinates) === 1;
             });
-            callback(cons);
+            callback(null, cons);
         });
     }).await(function(error, lines, stars) {
         console.log(error);
