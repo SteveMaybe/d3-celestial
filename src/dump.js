@@ -10,6 +10,7 @@ function dump(done_func) {
     projection = Celestial.projection(cfg.projection).rotate(rotation).translate([m.width / 2, m.height / 2]).scale([m.scale]);
     culture = (cfg.culture !== "" && cfg.culture !== "iau") ? cfg.culture : "";
     scale = 1/m.scale;
+    adapt = 1;
 
     if (proj.clip) {
         projection.clipAngle(90);
@@ -69,7 +70,7 @@ function dump(done_func) {
         });
     }).await(function(error, lines, stars) {
         console.log(error);
-        console.log("done")
+        console.log("done");
         console.log(lines);
         console.log(stars);
     });
