@@ -6004,11 +6004,7 @@ function dump(done_func) {
             callback(raw_data);
             done_func(raw_data);
         });
-    });
-
-
-    // Get stars
-    q.defer(function (callback) {
+    }).defer(function (callback) {
         d3.json(path + "/" + cfg.stars.data, function (error, json) {
             if (error) callback(error);
 
@@ -6018,12 +6014,11 @@ function dump(done_func) {
             });
             callback(cons);
         });
-    });
-
-    q.await(function(cords, lines, stars) {
-        console.log("Done");
-       console.log(lines);
-       console.log(stars);
+    }).await(function(error, lines, stars) {
+        console.log(error);
+        console.log("done")
+        console.log(lines);
+        console.log(stars);
     });
 
     // Helper functions
