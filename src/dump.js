@@ -23,7 +23,9 @@ function dump(done_func) {
     var raw_data = [];
 
     const tPoint = (v) => {
+        console.log(v);
         pts = map(v);
+        console.log(pts);
         return [pts[0], pts[1]]
     };
 
