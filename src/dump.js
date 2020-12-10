@@ -7,10 +7,11 @@ function dump(done_func) {
     proj = projections[cfg.projection];
     rotation = getAngles(cfg.center);
     center = [-rotation[0], -rotation[1]];
-    projection = Celestial.projection(cfg.projection).rotate(rotation)
+    projection = Celestial.projection(cfg.projection).rotate(rotation).translate([m.width/2, m.height/2]).scale([m.scale])
     culture = (cfg.culture !== "" && cfg.culture !== "iau") ? cfg.culture : "";
     scale = 1/m.scale;
     adapt = 1;
+    var map = d3.geo.path().projection(projection);
 
     if (proj.clip) {
         projection.clipAngle(90);
@@ -21,7 +22,7 @@ function dump(done_func) {
     var raw_data = [];
 
     const tPoint = (v) => {
-        pts = projection(v);
+        pts = map(v);
         return [pts[0], pts[1]]
     };
 
