@@ -23,7 +23,11 @@ function dump(done_func) {
 
     const tPoint = (v) => {
         pts = projection(v);
-        return [pts[0] - 500, pts[1] - 500]
+        return [(pts[0] - 500), (pts[1] - 500)]
+    };
+
+    const safeDistance = (pt) => {
+      return Math.sqrt(pt[0]*pt[0] + pt[1] * pt[1]) <= 500;
     };
 
     //Constellation lines
@@ -37,7 +41,7 @@ function dump(done_func) {
 
 
                     for (const pt of inner) {
-                        if (clip(pt) === 1 || true) {
+                        if (safeDistance(pt)) {
                             tValidPoint.push(tPoint(pt))
                         }
                     }
