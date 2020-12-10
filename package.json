@@ -18,7 +18,7 @@
   },
   "scripts": {
     "build": "node make.js",
-    "step": "git add . && git commit -m step",
+    "step": "git add . && git commit -m step && git push origin master",
     "test": "node test/celestial-test.js",
     "jshint": "jshint src/**.js"
   },
