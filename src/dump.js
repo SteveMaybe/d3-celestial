@@ -31,7 +31,7 @@ function dump(done_func) {
     };
 
     const scalePts = (pt) => {
-        return [pt[0] * 0.0015, pt[1] * 0.0015]
+        return [pt[0] * 0.002, pt[1] * 0.002]
     }
 
     //Constellation lines
