@@ -36,7 +36,7 @@ function dump(done_func) {
 
 
                     for (const pt of inner) {
-                        if (clip(pt) === 1) {
+                        if (clip(pt) === 1 || true) {
                             tValidPoint.push(tPoint(pt))
                         }
                     }
