@@ -5984,7 +5984,7 @@ function dump(done_func) {
 
 
                     for (const pt of inner) {
-                        if (safeDistance(pt)) {
+                        if (safeDistance(tPoint(pt))) {
                             tValidPoint.push(tPoint(pt))
                         }
                     }
