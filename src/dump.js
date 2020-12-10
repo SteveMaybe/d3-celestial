@@ -11,11 +11,12 @@ function dump(done_func) {
     culture = (cfg.culture !== "" && cfg.culture !== "iau") ? cfg.culture : "";
     scale = 1/m.scale;
     adapt = 1;
-    var map = d3.geo.path().projection(projection);
 
     if (proj.clip) {
         projection.clipAngle(90);
     }
+
+    var map = d3.geo.path().projection(projection);
 
     var q = d3.queue(2);
 
