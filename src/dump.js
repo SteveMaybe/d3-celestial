@@ -1,6 +1,6 @@
 /* global d3, Celestial, projections, poles, getData, getPlanet, getMwbackground, getAngles, getWidth, getGridValues, has, isArray, halfπ, symbols, starnames, dsonames, bvcolor, settings, formats, transformDeg, euler, Round */
 
-function dump(done_func) {
+function dump(pt_scale, offsets, safe_dist, done_func) {
     m = Celestial.metrics();
     cfg = settings.set();
     path = cfg.datapath;
@@ -23,15 +23,15 @@ function dump(done_func) {
 
     const tPoint = (v) => {
         pts = projection(v);
-        return [(pts[0] - 500), (pts[1] - 500)*-1]
+        return [(pts[0] - offsets), (pts[1] - offsets)*-1]
     };
 
     const safeDistance = (pt) => {
-      return Math.sqrt(pt[0]*pt[0] + pt[1] * pt[1]) <= 500;
+      return Math.sqrt(pt[0]*pt[0] + pt[1] * pt[1]) <= safe_dist;
     };
 
     const scalePts = (pt) => {
-        return [pt[0] * 0.002, pt[1] * 0.002]
+        return [pt[0] * pt_scale, pt[1] * pt_scale]
     }
 
     //Constellation lines
