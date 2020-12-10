@@ -23,7 +23,7 @@ function dump(done_func) {
 
     const tPoint = (v) => {
         pts = projection(v);
-        return [pts[0], pts[1]]
+        return [pts[0] - 500, pts[1] - 500]
     };
 
     //Constellation lines
