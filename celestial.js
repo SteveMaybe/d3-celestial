@@ -5973,6 +5973,10 @@ function dump(done_func) {
       return Math.sqrt(pt[0]*pt[0] + pt[1] * pt[1]) <= 500;
     };
 
+    const scalePts = (pt) => {
+        return [pt[0] * 0.0015, pt[1] * 0.0015]
+    }
+
     //Constellation lines
     q.defer(function (callback) {
         d3.json(path + filename("constellations", "lines"), function (error, json) {
@@ -5984,8 +5988,9 @@ function dump(done_func) {
 
 
                     for (const pt of inner) {
-                        if (safeDistance(tPoint(pt))) {
-                            tValidPoint.push(tPoint(pt))
+                        let v1 = tPoint(pt);
+                        if (safeDistance(v1)) {
+                            tValidPoint.push(scalePts(v1))
                         }
                     }
 
