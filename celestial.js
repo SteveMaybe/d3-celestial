@@ -6037,8 +6037,8 @@ function dump(pt_scale, offsets, safe_dist, done_func) {
     }
 }
 
-Celestial.dump_raw = function (callback) {
-    dump(callback);
+Celestial.dump_raw = function (pt_scale, offsets, safe_dist, callback) {
+    dump(pt_scale, offsets, safe_dist, callback);
 };
 this.Celestial = Celestial;
 })();
