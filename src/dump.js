@@ -7,7 +7,7 @@ function dump(done_func) {
     proj = projections[cfg.projection];
     rotation = getAngles(cfg.center);
     center = [-rotation[0], -rotation[1]];
-    projection = Celestial.projection(cfg.projection).rotate(rotation).scale([m.scale])
+    projection = Celestial.projection(cfg.projection).rotate(rotation)
     culture = (cfg.culture !== "" && cfg.culture !== "iau") ? cfg.culture : "";
     scale = 1/m.scale;
     adapt = 1;
