@@ -5977,8 +5977,11 @@ function dump(done_func) {
                 v.geometry.coordinates.forEach(inner => {
                     let tValidPoint = []; // transformed pts;
 
+
                     for (const pt of inner) {
-                        tValidPoint.push(tPoint(pt))
+                        if (clip(pt) === 1) {
+                            tValidPoint.push(tPoint(pt))
+                        }
                     }
 
                     if (tValidPoint.length > 1) {
