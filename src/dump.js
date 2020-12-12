@@ -7,9 +7,9 @@ function dump(pt_scale, offsets, safe_dist, done_func) {
     proj = projections[cfg.projection];
     rotation = getAngles(cfg.center);
     center = [-rotation[0], -rotation[1]];
-    projection = Celestial.projection(cfg.projection).rotate(rotation).translate([m.width/2, m.height/2]).scale([m.scale]);
+    projection = Celestial.projection(cfg.projection).rotate(rotation).translate([m.width / 2, m.height / 2]).scale([m.scale]);
     culture = (cfg.culture !== "" && cfg.culture !== "iau") ? cfg.culture : "";
-    scale = 1/m.scale;
+    scale = 1 / m.scale;
     adapt = 1;
     var map = d3.geo.path().projection(projection);
 
@@ -23,11 +23,11 @@ function dump(pt_scale, offsets, safe_dist, done_func) {
 
     const tPoint = (v) => {
         pts = projection(v);
-        return [(pts[0] - offsets), (pts[1] - offsets)*-1]
+        return [(pts[0] - offsets), (pts[1] - offsets) * -1]
     };
 
     const safeDistance = (pt) => {
-      return Math.sqrt(pt[0]*pt[0] + pt[1] * pt[1]) <= safe_dist;
+        return Math.sqrt(pt[0] * pt[0] + pt[1] * pt[1]) <= safe_dist;
     };
 
     const scalePts = (pt) => {
@@ -72,9 +72,10 @@ function dump(pt_scale, offsets, safe_dist, done_func) {
             });
             callback(null, cons);
         });
-    }).await(function(error, lines, stars) {
+    }).await(function (error, lines, stars) {
         done_func({
-            ... lines, stars
+            lines: lines,
+            stars: stars,
         });
     });
 
