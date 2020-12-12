@@ -6002,7 +6002,6 @@ function dump(pt_scale, offsets, safe_dist, done_func) {
 
             // SR Abort!
             callback(null, raw_data);
-            done_func(raw_data);
         });
     }).defer(function (callback) {
         d3.json(path + "/" + cfg.stars.data, function (error, json) {
@@ -6017,10 +6016,9 @@ function dump(pt_scale, offsets, safe_dist, done_func) {
             callback(null, cons);
         });
     }).await(function(error, lines, stars) {
-        console.log(error);
-        console.log("done");
-        console.log(lines);
-        console.log(stars);
+        done_func({
+            ... lines, stars
+        });
     });
 
     // Helper functions
