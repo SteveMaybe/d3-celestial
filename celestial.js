@@ -6011,7 +6011,7 @@ function dump(pt_scale, offsets, safe_dist, done_func) {
             cons = cons.features.filter(function (d) {
                 return d.properties.mag <= cfg.stars.designationLimit * adapt && clip(d.geometry.coordinates) === 1;
             }).map(v => {
-                return tPoint(v.geometry.coordinates);
+                return scalePts(tPoint(v.geometry.coordinates));
             });
             callback(null, cons);
         });
